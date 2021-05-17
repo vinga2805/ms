@@ -6,7 +6,7 @@ def gitBranch = "master"
 def registry = "${repoFullName}"
 def registryCredential = 'docker_cred'
 def dockerImage = ''
-def namespace = "tesla"
+def namespace = "100ms"
 pipeline {
     agent any
     stages{
@@ -74,6 +74,7 @@ pipeline {
                 script {
                     echo "-----Deploying helm chart"
                     sh """#!/bin/bash -x
+                       source ~/.bashrc
                        if [ `helm list -n ${namespace} | grep ${app} | wc -l` == 1 ]
                        then 
                        echo "chart already running"
@@ -92,6 +93,7 @@ pipeline {
                      echo "Wait performing healthcheck...."
                      withCredentials([usernamePassword(credentialsId: 'github_cred', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                        sh """#!/bin/bash -x
+                          source ~/.bashrc
                           sleep 60
                           if [ `curl -Iks http://ms.vinga.tk/teslaDyDB/ | head -1 | cut -d " " -f2` == "200" ]
                           then 
