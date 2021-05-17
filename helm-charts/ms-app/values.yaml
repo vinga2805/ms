@@ -1,0 +1,63 @@
+affinity: {}
+autoscaling:
+  enabled: false
+  maxReplicas: 100
+  minReplicas: 1
+  targetCPUUtilizationPercentage: 80
+envProperties:
+  MYSQLDB: teslatest
+  MYSQLHOST: mydb-mysql
+  MYSQLPORT: '3306'
+  MYSQLUNAME: root
+extraPorts:
+- name: metrics
+  port: 9012
+  targetPort: 9012
+fullnameOverride: ''
+image:
+  pullPolicy: IfNotPresent
+  repository: vinga2805/ms
+  tag: snapshot_0.0.1_master_7f067fa
+imagePullSecrets: []
+ingress:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  enabled: false
+  hosts:
+  - host: ms.vinga.tk
+    paths:
+    - /
+  tls: []
+nameOverride: ''
+nodeSelector: {}
+podAnnotations:
+  prometheus.io/path: /metrics
+  prometheus.io/port: '9012'
+  prometheus.io/scrape: 'true'
+podSecurityContext: {}
+replicaCount: 1
+resources: {}
+
+green:
+  enabled: false
+
+blue:
+  enabled: true
+
+productionSlot: blue
+
+secret:
+  password: YWxmYV8xMjMK
+securityContext: {}
+service:
+  port: 80
+  targetPort: 8080
+  type: ClusterIP
+serviceAccount:
+  annotations: {}
+  create: true
+  name: ''
+tolerations: []
+volumeMounts:
+- mountPath: /var/log/apps/teslaDyDB
+  name: log-storage

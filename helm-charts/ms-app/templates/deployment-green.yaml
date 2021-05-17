@@ -1,0 +1,100 @@
+{{ if .Values.green.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ms-app.fullname" . }}-green
+  labels:
+    {{- include "ms-app.labels" . | nindent 4 }}
+spec:
+{{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+{{- end }}
+  selector:
+    matchLabels:
+      {{- include "ms-app.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+    {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        {{- include "ms-app.selectorLabels" . | nindent 8 }}
+        slot: green
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "ms-app.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}-green
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+          envFrom:
+{{- if .Values.envProperties }}
+          - configMapRef:
+              name: {{ .Chart.Name }}-env-configmap
+{{- end }}
+{{- if .Values.secret }}
+          - secretRef:
+              name: {{ .Chart.Name }}-secret
+{{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.targetPort }}
+              protocol: TCP
+{{- range $i, $port := .Values.extraPorts }}
+            - name: {{ $port.name }}
+              containerPort: {{ $port.targetPort }}
+              protocol: {{ default "TCP" $port.protocol }}
+{{- end }}
+{{- if or .Values.volumeMounts .Values.extraVolumeMounts }}
+          volumeMounts:
+{{- range $i, $volumeMount := .Values.volumeMounts }}
+          - name: {{ $volumeMount.name }}
+            mountPath: {{ $volumeMount.mountPath }}
+{{- end }}
+{{- end }}
+          livenessProbe:
+            httpGet:
+              path: {{ default "/teslaDyDB/healthcheck" .Values.service.healthCheckPath }}
+              port: http
+          readinessProbe:
+            httpGet:
+              path: {{ default "/teslaDyDB/healthcheck" .Values.service.healthCheckPath }}
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+        - name: sidecar-log-collector
+          image: vinga2805/ms-fluent:v6
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          resources:
+            limits:
+              cpu: 100m
+              memory: 200Mi
+          volumeMounts:
+            - name: log-storage
+              mountPath: /mnt
+      volumes:
+        - name: log-storage
+          emptyDir: {}
+
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}
