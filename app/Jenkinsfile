@@ -63,6 +63,7 @@ pipeline {
                       sh """#!/bin/bash -x
                          pip install pyyaml
                          pip install pybump
+                         rm -rf values-files
                          git clone ${valuesRepo} values-files
                          python update_image.py ${imageFullName}
                       """
