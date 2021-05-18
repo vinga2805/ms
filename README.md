@@ -29,7 +29,7 @@
 - http://kibana.vinga.tk
 - http://ms-prod.vinga.tk/teslaDyDB/
 - http://ms-stage.vinga.tk/teslaDyDB/
-
+- Everything is tested successfully and uploaded the screenshots as evidance.
 
 ## Continous Integration and Deployment
 ### Requirements
