@@ -21,7 +21,7 @@ green:
 image:
   pullPolicy: IfNotPresent
   repository: vinga2805/ms
-  tag: snapshot_0.0.1_master_cb50df5
+  tag: snapshot_0.0.1_master_9aa61f7
 imagePullSecrets: []
 ingress:
   annotations:
