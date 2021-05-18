@@ -63,31 +63,84 @@ pipeline {
                       sh """#!/bin/bash -x
                          pip install pyyaml
                          pip install pybump
+                         rm -rf values-files
                          git clone ${valuesRepo} values-files
                          python update_image.py ${imageFullName}
                       """
                 }            
             }       
         }
-        stage ('Deploying application'){
+        stage ('Bootstraping Application'){
             steps {
                 script {
-                    echo "-----Deploying helm chart"
+                    echo "-----Checking if Blue version exists-------"
                     sh """#!/bin/bash -x
                        source ~/.bashrc
-                       if [ `helm list -n ${namespace} | grep ${app} | wc -l` == 1 ]
-                       then 
-                       echo "chart already running"
-                       helm upgrade ${app} values-files/helm-charts/ms-app/ -n ${namespace}
-                       else 
-                       echo "Chart is not running"
+                       version=`kubectl get service ${app}-${app}-app-service-prod -o=jsonpath='{.spec.selector.slot}' --namespace=${namespace}`
+                       count=`helm list -n 100ms | awk '{print \$1}' | grep ms | wc -l`
+                       if [ \$count == 1 ]
+                       then
+                       echo "The application is already deployed version: \$version"
+                       else
+                       echo "The application is not deployed yet...."
+                       echo "Deploying Blue version first"
                        helm install ${app} values-files/helm-charts/ms-app/ -n ${namespace}
+                       fi
+                    """
+                }
+            }
+        }
+        stage ('Blue/Green Deployment'){
+            steps {
+                script {
+                    echo "-----Checking if Blue/Green version exists------"
+                    sh """#!/bin/bash -x
+                       source ~/.bashrc
+                       version=`kubectl  get service ${app}-${app}-app-service-prod -o=jsonpath='{.spec.selector.slot}' --namespace=${namespace}`
+                       if [ \$version == "blue" ]
+                       then
+                       new_version="green"
+                       echo "Deploying application version: \$new_version"
+                       helm upgrade ${app} values-files/helm-charts/ms-app/ --set \$new_version.enabled=true --reuse-values --namespace=${namespace}
+                       sleep 30
+                       echo "Testing application on newly staged environment"
+                       if [ `curl -Iks https://ms-stage.vinga.tk/teslaDyDB/ | head -1 | cut -d " " -f2` == "200" ]
+                       then
+                       echo "Application healthcheck is successful on stage"
+                       echo "Production can be pointed to the new stage environment"
+                       helm upgrade ${app} values-files/helm-charts/ms-app/ --set productionSlot=\$new_version --reuse-values --namespace=${namespace}
+                       echo "Production is now pointed to new staged environment"
+                       echo "Removing stage application"
+                       helm upgrade ${app} values-files/helm-charts/ms-app/  --set \$version.enabled=false --reuse-values --namespace=${namespace}
+                       else
+                       echo "Rolling back application"
+                       helm upgrade ${app} values-files/helm-charts/ms-app/ --set \$new_version.enabled=false --reuse-values --namespace=${namespace}
+                       fi
+                       else
+                       new_version="blue"
+                       echo "Deploying application version: \$new_version"
+                       helm upgrade ${app} values-files/helm-charts/ms-app/ --set \$new_version.enabled=true --reuse-values --namespace=${namespace}
+                       sleep 30
+                       echo "Testing application on newly staged environment"
+                       if [ `curl -Iks https://ms-stage.vinga.tk/teslaDyDB/ | head -1 | cut -d " " -f2` == "200" ]
+                       then
+                       echo "Application healthcheck is successful on stage"
+                       echo "Production can be pointed to the new stage environment"
+                       helm upgrade ${app} values-files/helm-charts/ms-app/ --set productionSlot=\$new_version --reuse-values --namespace=${namespace}
+                       echo "Production is now pointed to new staged environment"
+                       echo "Removing stage application"
+                       helm upgrade ${app} values-files/helm-charts/ms-app/  --set \$version.enabled=false --reuse-values --namespace=${namespace}
+                       else
+                       echo "Rolling back application"
+                       helm upgrade ${app} values-files/helm-charts/ms-app/ --set \$new_version.enabled=false --reuse-values --namespace=${namespace}
+                       fi
                        fi
                     """ 
                 }
             }
         }
-        stage ('health-check') {
+
+        stage ('Production healthcheck and github commit') {
             steps {
                 script {
                      echo "Wait performing healthcheck...."
@@ -95,9 +148,9 @@ pipeline {
                        sh """#!/bin/bash -x
                           source ~/.bashrc
                           sleep 60
-                          if [ `curl -Iks http://ms.vinga.tk/teslaDyDB/ | head -1 | cut -d " " -f2` = "200" ]
+                          if [ `curl -Iks https://ms-prod.vinga.tk/teslaDyDB/ | head -1 | cut -d " " -f2` == "200" ]
                           then 
-                          echo "Application healthcheck is successful"
+                          echo "Procution healthcheck is successful"
                           echo "Application deployed successfully"
                           cd values-files
                           git checkout master
@@ -110,7 +163,6 @@ pipeline {
                           echo "Rolling back the application..."
                           helm rollback ${app} -n ${namespace}
                           fi
-                          rm -rf values-files
                        """
                      }
                 }
