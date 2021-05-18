@@ -19,6 +19,7 @@
    - jmx-prometheus-exporter (Application with jmx monitoring)
    - mysqld-prometheus (Mysql Monitoring)
 - MysqlDB for storing the user and audit data.
+- Nginx Ingress along with certmanager for issuing SSL cert for vinga.tk
 - 100ms application for creating DynamoDB via UI and template.
 
 ### Output
@@ -26,8 +27,8 @@
 - http://prometheus.vinga.tk
 - http://grafana.vinga.tk
 - http://kibana.vinga.tk
-- http://ms-prod.vinga.tk/teslaDyDB
-- http://ms-stage.vinga.tk/teslaDyDB
+- http://ms-prod.vinga.tk/teslaDyDB/
+- http://ms-stage.vinga.tk/teslaDyDB/
 
 
 ## Continous Integration and Deployment
@@ -60,8 +61,24 @@
 - Clone the same repo in subdirectory values-files
 - Update the tag in the values.yaml 
 - Bump up the chart version
-- Deploys the application via Helm if its first time otherwise it upgrades the helm chart
-- Perform healthcheck of the application
+- Check if the application is already deployed if not then it will bootstrap the application for the first time. (this can be first blue deployment)
+- If the application is already deployed then check the slot if it is blue or green.
+- If the slot is blue then parallel setup for green will be created for stage environment which will point to https://ms-stage.vinga.tk/teslaDyDB/
+- Testing will be performed on the staged environment(green),once successful then will shift point the prod service pointing to green environment.
+- If the testing fails then we will simply decomission the green environment.
+- Once the prod service is pointed to green environment, we will decomission the blue environment.
+- Perform healthcheck of the production application.
 - If the Healthcheck passes then it will push the changes in github
 - If the Healthcheck fails it performs rollback via helm.
-- Use sample dynamoDB template to test the application
+- Use sample dynamoDB template to test the application.
+
+### How to use the application
+- Login https://ms-prod.vinga.tk/teslaDyDB
+- Register new user with password. (AWS credentials are mandatory)
+- you can login with username and password.
+- You can create a dynamoDB from the console by providing all the mandatory details.
+- You can also pass json template to create dynamoDB. (sample-template in the root for the project)
+
+### Note
+As we know there are many tools in the market which supports B/G, Canary deployment out of the box,I am also aware that Helm is definately not right choice for this,
+but to demonostrate my length and breadth of DevOps skill sets, I implemented this way.(Ansible/Jenkins(groovy), Kubernetes, helm, certmanager)  
