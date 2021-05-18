@@ -70,25 +70,17 @@ pipeline {
                 }            
             }       
         }
-        stage ('testing'){
-            echo "TESTING..."
-            source ~/.bashrc
-            VERSION= sh (
-          		script: "kubectl  get service ${app}-${app}-app-service-prod -o=jsonpath='{.spec.selector.slot}' --namespace=${namespace}",
-          		returnStdout: true
-         	).trim()
-            echo ${VERSION}
-        }
         stage ('Bootstraping Application'){
             steps {
                 script {
                     echo "-----Checking if Blue version exists-------"
                     sh """#!/bin/bash -x
                        source ~/.bashrc
-                       #version=`"kubectl  get service ${app}-${app}-app-service-prod -o=jsonpath='{.spec.selector.slot}' --namespace=${namespace}"`
+                       kubectl get service ${app}-${app}-app-service-prod -o=jsonpath='{.spec.selector.slot}' --namespace=${namespace}
+                       helm list -n ${namespace} | awk '{print \$1}' | grep ${app} | wc -l
                        if [ `"helm list -n ${namespace} | awk '{print \$1}' | grep ${app} | wc -l"` == 1 ]
                        then
-                       echo "The application is already deployed and version is: `"kubectl  get service ${app}-${app}-app-service-prod -o=jsonpath='{.spec.selector.slot}' --namespace=${namespace}"`"
+                       echo "The application is already deployed and"
                        else
                        echo "The application is not deployed yet...."
                        echo "Deploying Blue version first"
