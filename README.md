@@ -79,6 +79,17 @@
 - You can create a dynamoDB from the console by providing all the mandatory details.
 - You can also pass json template to create dynamoDB. (sample-template in the root for the project)
 
+### Deployment flow
+![alt text](https://github.com/vinga2805/ms/blob/master/artifacts/Screenshot%202021-05-18%20at%203.15.44%20PM.png)
+
+![alt text](https://github.com/vinga2805/ms/blob/master/artifacts/Screenshot%202021-05-18%20at%203.18.09%20PM.png)
+
+![alt text](https://github.com/vinga2805/ms/blob/master/artifacts/Screenshot%202021-05-18%20at%203.19.28%20PM.png)
+
+![alt text](https://github.com/vinga2805/ms/blob/master/artifacts/Screenshot%202021-05-18%20at%203.22.18%20PM.png)
+
+![alt text](https://github.com/vinga2805/ms/blob/master/artifacts/Screenshot%202021-05-18%20at%203.24.08%20PM.png)
+
 ### Note
 As we know there are many tools in the market which supports B/G, Canary deployment out of the box,Helm is definately not right choice for this,
 but to demonostrate the length and breadth of DevOps skill sets, I implemented this way.(Ansible/Jenkins(groovy), Kubernetes, helm, certmanager)  
