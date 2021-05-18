@@ -76,10 +76,10 @@ pipeline {
                     echo "-----Checking if Blue version exists-------"
                     sh """#!/bin/bash -x
                        source ~/.bashrc
-                       version=`kubectl  get service ${app}-${app}-app-service-prod -o=jsonpath='{.spec.selector.slot}' --namespace=${namespace}`
+                       version=`"kubectl  get service ${app}-${app}-app-service-prod -o=jsonpath='{.spec.selector.slot}' --namespace=${namespace}"`
                        if [ `"helm list -n ${namespace} | awk '{print \$1}' | grep ${app} | wc -l"` == 1 ]
                        then
-                       echo "The application is already deployed."
+                       echo "The application is already deployed and version is: $version"
                        else
                        echo "The application is not deployed yet...."
                        echo "Deploying Blue version first"
