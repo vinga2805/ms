@@ -107,6 +107,27 @@
            - kibana.vinga.tk
            - ms-prod.vinga.tk
            - ms-stage.vinga.tk
+    - name: Installing certmanager for the cluster
+      shell: kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v0.16.1/cert-manager.yaml
+      become_user: ubuntu
+      ignore_errors: yes
+    - name: Creating certificate issuer.
+      shell: kubectl create -f certmanager/prod_issuer.yaml
+      become_user: ubuntu
+      ignore_errors: yes
+    - name: Issuing production certificates.
+      shell: kubectl apply -f prod_ingress.yaml -n 100ms
+      become_user: ubuntu
+      ignore_errors: yes
+    - name: Check if SSL works?
+      shell: curl -sIk https://ms-prod.vinga.tk/teslaDyDB/ | head -1 | awk '{print $2}'
+      register: status
+    - debug: 
+       msg: "Stack deployed successfully"
+      when: status.stdout == "200"
+       
+
+
 
 
 

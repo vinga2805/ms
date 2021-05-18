@@ -95,7 +95,7 @@ pipeline {
                        sh """#!/bin/bash -x
                           source ~/.bashrc
                           sleep 60
-                          if [ `curl -Iks http://ms.vinga.tk/teslaDyDB/ | head -1 | cut -d " " -f2` == "200" ]
+                          if [ `curl -Iks http://ms.vinga.tk/teslaDyDB/ | head -1 | cut -d " " -f2` = "200" ]
                           then 
                           echo "Application healthcheck is successful"
                           echo "Application deployed successfully"
