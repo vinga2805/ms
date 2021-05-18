@@ -163,7 +163,6 @@ pipeline {
                           echo "Rolling back the application..."
                           helm rollback ${app} -n ${namespace}
                           fi
-                          rm -rf values-files
                        """
                      }
                 }
