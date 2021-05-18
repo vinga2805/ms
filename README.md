@@ -80,5 +80,5 @@
 - You can also pass json template to create dynamoDB. (sample-template in the root for the project)
 
 ### Note
-As we know there are many tools in the market which supports B/G, Canary deployment out of the box,I am also aware that Helm is definately not right choice for this,
-but to demonostrate my length and breadth of DevOps skill sets, I implemented this way.(Ansible/Jenkins(groovy), Kubernetes, helm, certmanager)  
+As we know there are many tools in the market which supports B/G, Canary deployment out of the box,Helm is definately not right choice for this,
+but to demonostrate the length and breadth of DevOps skill sets, I implemented this way.(Ansible/Jenkins(groovy), Kubernetes, helm, certmanager)  
