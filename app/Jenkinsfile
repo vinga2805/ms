@@ -97,7 +97,7 @@ pipeline {
                     sh """#!/bin/bash -x
                        source ~/.bashrc
                        version=`kubectl  get service ${app}-${app}-app-service-prod -o=jsonpath='{.spec.selector.slot}' --namespace=${namespace}`
-                       if [ \$version == "blue"]
+                       if [ \$version == "blue" ]
                        then
                        new_version="green"
                        echo "Deploying application version: \$new_version"
