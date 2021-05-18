@@ -76,17 +76,17 @@ pipeline {
                     echo "-----Checking if Blue version exists-------"
                     sh """#!/bin/bash -x
                        source ~/.bashrc
-                       kubectl get service ${app}-${app}-app-service-prod -o=jsonpath='{.spec.selector.slot}' --namespace=${namespace}
-                       helm list -n ${namespace} | awk '{print \$1}' | grep ${app} | wc -l
-                       if [ `"helm list -n ${namespace} | awk '{print \$1}' | grep ${app} | wc -l"` == 1 ]
+                       version=`kubectl get service ${app}-${app}-app-service-prod -o=jsonpath='{.spec.selector.slot}' --namespace=${namespace}`
+                       count=`helm list -n 100ms | awk '{print \$1}' | grep ms | wc -l`
+                       if [ \$count == 1 ]
                        then
-                       echo "The application is already deployed and"
+                       echo "The application is already deployed version: \$version"
                        else
                        echo "The application is not deployed yet...."
                        echo "Deploying Blue version first"
                        helm install ${app} values-files/helm-charts/ms-app/ -n ${namespace}
                        fi
-                    """ 
+                    """
                 }
             }
         }
@@ -97,42 +97,42 @@ pipeline {
                     sh """#!/bin/bash -x
                        source ~/.bashrc
                        version=`kubectl  get service ${app}-${app}-app-service-prod -o=jsonpath='{.spec.selector.slot}' --namespace=${namespace}`
-                       if [ $version == "blue"]
+                       if [ \$version == "blue"]
                        then
                        new_version="green"
-                       echo "Deploying application version: $new_version"
-                       helm upgrade ${app} values-files/helm-charts/ms-app/ --set $new_version.enabled=true --reuse-values
+                       echo "Deploying application version: \$new_version"
+                       helm upgrade ${app} values-files/helm-charts/ms-app/ --set \$new_version.enabled=true --reuse-values
                        sleep 30
                        echo "Testing application on newly staged environment"
                        if [ `curl -Iks http://ms-stage.vinga.tk/teslaDyDB/ | head -1 | cut -d " " -f2` == "200" ]
                        then
                        echo "Application healthcheck is successful on stage"
                        echo "Production can be pointed to the new stage environment"
-                       helm upgrade ${app} values-files/helm-charts/ms-app/ --set productionSlot=$new_version --reuse-values
+                       helm upgrade ${app} values-files/helm-charts/ms-app/ --set productionSlot=\$new_version --reuse-values
                        echo "Production is now pointed to new staged environment"
                        echo "Removing stage application"
-                       helm upgrade ${app} values-files/helm-charts/ms-app/  --set $version.enabled=false --reuse-values
+                       helm upgrade ${app} values-files/helm-charts/ms-app/  --set \$version.enabled=false --reuse-values
                        else
                        echo "Rolling back application"
-                       helm upgrade ${app} values-files/helm-charts/ms-app/ --set $new_version.enabled=false --reuse-values
+                       helm upgrade ${app} values-files/helm-charts/ms-app/ --set \$new_version.enabled=false --reuse-values
                        fi
                        else
                        new_version="blue"
-                       echo "Deploying application version: $new_version"
-                       helm upgrade ${app} values-files/helm-charts/ms-app/ --set $new_version.enabled=true --reuse-values
+                       echo "Deploying application version: \$new_version"
+                       helm upgrade ${app} values-files/helm-charts/ms-app/ --set \$new_version.enabled=true --reuse-values
                        sleep 30
                        echo "Testing application on newly staged environment"
                        if [ `curl -Iks http://ms-stage.vinga.tk/teslaDyDB/ | head -1 | cut -d " " -f2` == "200" ]
                        then
                        echo "Application healthcheck is successful on stage"
                        echo "Production can be pointed to the new stage environment"
-                       helm upgrade ${app} values-files/helm-charts/ms-app/ --set productionSlot=$new_version --reuse-values
+                       helm upgrade ${app} values-files/helm-charts/ms-app/ --set productionSlot=\$new_version --reuse-values
                        echo "Production is now pointed to new staged environment"
                        echo "Removing stage application"
-                       helm upgrade ${app} values-files/helm-charts/ms-app/  --set $version.enabled=false --reuse-values
+                       helm upgrade ${app} values-files/helm-charts/ms-app/  --set \$version.enabled=false --reuse-values
                        else
                        echo "Rolling back application"
-                       helm upgrade ${app} values-files/helm-charts/ms-app/ --set $new_version.enabled=false --reuse-values
+                       helm upgrade ${app} values-files/helm-charts/ms-app/ --set \$new_version.enabled=false --reuse-values
                        fi
                        fi
                     """ 
