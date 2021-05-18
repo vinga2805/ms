@@ -70,6 +70,15 @@ pipeline {
                 }            
             }       
         }
+        stage ('testing'){
+            echo "TESTING..."
+            source ~/.bashrc
+            VERSION= sh (
+          		script: "kubectl  get service ${app}-${app}-app-service-prod -o=jsonpath='{.spec.selector.slot}' --namespace=${namespace}",
+          		returnStdout: true
+         	).trim()
+            echo ${VERSION}
+        }
         stage ('Bootstraping Application'){
             steps {
                 script {
