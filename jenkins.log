@@ -1,0 +1,429 @@
+Started by user admin
+Obtained app/Jenkinsfile from git https://github.com/vinga2805/ms.git
+Running in Durability level: MAX_SURVIVABILITY
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/lib/jenkins/workspace/ms
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --is-inside-work-tree # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/vinga2805/ms.git # timeout=10
+Fetching upstream changes from https://github.com/vinga2805/ms.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.17.1'
+ > git fetch --tags --progress -- https://github.com/vinga2805/ms.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/master^{commit} # timeout=10
+Checking out Revision 78fe5f18d4992608859d05d038bb0096661807a5 (refs/remotes/origin/master)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 78fe5f18d4992608859d05d038bb0096661807a5 # timeout=10
+Commit message: "Merge branch 'master' of https://github.com/vinga2805/ms"
+ > git rev-list --no-walk a0bdf1de394d65e695f432aab54fd3464206401b # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Build Jar)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] readMavenPom
+[Pipeline] sh
++ git log -n 1 --pretty=format:%H
+[Pipeline] sh
++ git log -n 1 --pretty=format:%ae
+[Pipeline] echo
+Snapshot version detected
+[Pipeline] sh
++ git log -n 1 --pretty=format:%h
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] sh
++ mvn clean package -f app/pom.xml
+[[1;34mINFO[m] Scanning for projects...
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m------------------------< [0;36mteslaDyDB:teslaDyDB[0;1m >-------------------------[m
+[[1;34mINFO[m] [1mBuilding teslaDyDB 0.0.1-SNAPSHOT[m
+[[1;34mINFO[m] [1m--------------------------------[ war ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36mteslaDyDB[0;1m ---[m
+[[1;34mINFO[m] Deleting /var/lib/jenkins/workspace/ms/app/target
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mteslaDyDB[0;1m ---[m
+[[1;33mWARNING[m] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[[1;34mINFO[m] Copying 4 resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.0:compile[m [1m(default-compile)[m @ [36mteslaDyDB[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;33mWARNING[m] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
+[[1;34mINFO[m] Compiling 12 source files to /var/lib/jenkins/workspace/ms/app/target/classes
+[[1;34mINFO[m] /var/lib/jenkins/workspace/ms/app/src/main/java/controller/CreateTableServlet.java: /var/lib/jenkins/workspace/ms/app/src/main/java/controller/CreateTableServlet.java uses or overrides a deprecated API.
+[[1;34mINFO[m] /var/lib/jenkins/workspace/ms/app/src/main/java/controller/CreateTableServlet.java: Recompile with -Xlint:deprecation for details.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36mteslaDyDB[0;1m ---[m
+[[1;33mWARNING[m] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[[1;34mINFO[m] skip non existing resourceDirectory /var/lib/jenkins/workspace/ms/app/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.0:testCompile[m [1m(default-testCompile)[m @ [36mteslaDyDB[0;1m ---[m
+[[1;34mINFO[m] No sources to compile
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-surefire-plugin:2.12.4:test[m [1m(default-test)[m @ [36mteslaDyDB[0;1m ---[m
+[[1;34mINFO[m] No tests to run.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-war-plugin:3.2.1:war[m [1m(default-war)[m @ [36mteslaDyDB[0;1m ---[m
+[[1;34mINFO[m] Packaging webapp
+[[1;34mINFO[m] Assembling webapp [teslaDyDB] in [/var/lib/jenkins/workspace/ms/app/target/teslaDyDB-0.0.1-SNAPSHOT]
+[[1;34mINFO[m] Processing war project
+[[1;34mINFO[m] Copying webapp resources [/var/lib/jenkins/workspace/ms/app/WebContent]
+[[1;34mINFO[m] Webapp assembled in [102 msecs]
+[[1;34mINFO[m] Building war: /var/lib/jenkins/workspace/ms/app/target/teslaDyDB-0.0.1-SNAPSHOT.war
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1;32mBUILD SUCCESS[m
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] Total time:  4.755 s
+[[1;34mINFO[m] Finished at: 2021-05-18T08:34:24Z
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Create image)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] isUnix
+[Pipeline] sh
++ docker build -t vinga2805/ms:snapshot_0.0.1_master_78fe5f1 ./app/
+Sending build context to Docker daemon  35.33MB
+
+Step 1/11 : FROM tomcat:jdk8-adoptopenjdk-openj9
+ ---> 69fa59a63c34
+Step 2/11 : LABEL maintainer="vishalonwork@gmail.com"
+ ---> Running in 6988a562e19e
+Removing intermediate container 6988a562e19e
+ ---> 880a98e8729d
+Step 3/11 : ADD target/teslaDyDB-0.0.1-SNAPSHOT.war  /usr/local/tomcat/webapps/teslaDyDB.war
+ ---> b2fb96a09ece
+Step 4/11 : RUN mkdir -p /var/log/apps/teslaDyDB
+ ---> Running in 3ad9d4b17004
+Removing intermediate container 3ad9d4b17004
+ ---> cd13dd088379
+Step 5/11 : WORKDIR /usr/local/tomcat/bin/
+ ---> Running in a5e136c57581
+Removing intermediate container a5e136c57581
+ ---> 0faeab8bd225
+Step 6/11 : RUN curl https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.13.0/jmx_prometheus_javaagent-0.13.0.jar -o /usr/local/tomcat/bin/jmx_prometheus_javaagent.jar -L
+ ---> Running in ed1eb629f91e
+[91m  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0[0m[91m
+  0     0    0     0    0     0 [0m[91m     0      0 --:--:-- --:--:-- --:--:--     0[0m[91m
+100  365k  100  365k    0     0   408k      0 --:--:-- --:--:-- --:--:--  408k
+[0mRemoving intermediate container ed1eb629f91e
+ ---> 9a5b204f8d73
+Step 7/11 : ADD prometheus-jmx-config.yaml /usr/local/tomcat/bin/
+ ---> 2c343f5fdf1c
+Step 8/11 : ADD catalina.sh /usr/local/tomcat/bin/
+ ---> 644de36a2d17
+Step 9/11 : RUN chmod +x /usr/local/tomcat/bin/catalina.sh
+ ---> Running in 6a5f9fd36f92
+Removing intermediate container 6a5f9fd36f92
+ ---> f454654e0abb
+Step 10/11 : EXPOSE 8080
+ ---> Running in 4c7d50869af7
+Removing intermediate container 4c7d50869af7
+ ---> 8506347f4bb5
+Step 11/11 : CMD ["catalina.sh", "run"]
+ ---> Running in 5154f14b75fe
+Removing intermediate container 5154f14b75fe
+ ---> 1285e76fc741
+Successfully built 1285e76fc741
+Successfully tagged vinga2805/ms:snapshot_0.0.1_master_78fe5f1
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Publish artifacts)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withDockerRegistry
+$ docker login -u vinga2805 -p ******** https://index.docker.io/v1/
+WARNING! Using --password via the CLI is insecure. Use --password-stdin.
+WARNING! Your password will be stored unencrypted in /var/lib/jenkins/workspace/ms@tmp/bd4c9318-76f6-45e9-82b6-e4533818fb10/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+[Pipeline] {
+[Pipeline] isUnix
+[Pipeline] sh
++ docker tag vinga2805/ms:snapshot_0.0.1_master_78fe5f1 vinga2805/ms:snapshot_0.0.1_master_78fe5f1
+[Pipeline] isUnix
+[Pipeline] sh
++ docker push vinga2805/ms:snapshot_0.0.1_master_78fe5f1
+The push refers to repository [docker.io/vinga2805/ms]
+12320fe71217: Preparing
+6814527b2c11: Preparing
+63673bac3d50: Preparing
+17451458e9b2: Preparing
+1d555ac488e1: Preparing
+d66695c68e3f: Preparing
+48cc86e7f386: Preparing
+7c65f18e869e: Preparing
+3b0e2c07923f: Preparing
+722d7ad5af22: Preparing
+f26be578c502: Preparing
+ecbf1daa9a8a: Preparing
+d4dfaa212623: Preparing
+cba97cc5811c: Preparing
+0c78fac124da: Preparing
+d66695c68e3f: Waiting
+48cc86e7f386: Waiting
+7c65f18e869e: Waiting
+3b0e2c07923f: Waiting
+722d7ad5af22: Waiting
+f26be578c502: Waiting
+ecbf1daa9a8a: Waiting
+d4dfaa212623: Waiting
+cba97cc5811c: Waiting
+0c78fac124da: Waiting
+12320fe71217: Pushed
+6814527b2c11: Pushed
+63673bac3d50: Pushed
+1d555ac488e1: Pushed
+48cc86e7f386: Layer already exists
+7c65f18e869e: Layer already exists
+3b0e2c07923f: Layer already exists
+17451458e9b2: Pushed
+722d7ad5af22: Layer already exists
+f26be578c502: Layer already exists
+ecbf1daa9a8a: Layer already exists
+d4dfaa212623: Layer already exists
+cba97cc5811c: Layer already exists
+0c78fac124da: Layer already exists
+d66695c68e3f: Pushed
+snapshot_0.0.1_master_78fe5f1: digest: sha256:1565878392e378263b028f2df23e9e030f9188481f2bffb52e7ebe361a292a01 size: 3458
+[Pipeline] }
+[Pipeline] // withDockerRegistry
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Cleaning images from Jenkins)
+[Pipeline] sh
++ docker rmi vinga2805/ms:snapshot_0.0.1_master_78fe5f1
+Untagged: vinga2805/ms:snapshot_0.0.1_master_78fe5f1
+Untagged: vinga2805/ms@sha256:1565878392e378263b028f2df23e9e030f9188481f2bffb52e7ebe361a292a01
+Deleted: sha256:1285e76fc74111aea50eeddbeddabd4ae80016d561c64df1fb61b7d73974bd94
+Deleted: sha256:8506347f4bb5b5d3f5029d4e737a2491b8ceb613f18625ac11047659137776c3
+Deleted: sha256:f454654e0abbd9cd7a5d14587500f5a1fca342b339fe0be04de0b4f37006567f
+Deleted: sha256:c3abcd3caabb2267e2b548263ed682f61d36117c9b16d60aae9adc79e4384d66
+Deleted: sha256:644de36a2d17ff0c8aebdfdf25a8c20751f17c42d93f4b38c7950b75935e55ee
+Deleted: sha256:852a7f18cf50a5e9f7907e6a95cf590dfb52f0609d816a64c414142b01e8f27e
+Deleted: sha256:2c343f5fdf1c54ea197201dc7b36ecc1ec86499da99c0e5140c50ef75540d931
+Deleted: sha256:4d092703f43005eb7070030068ab7a2fe21177a8ed336ca3568597b4cefca0a8
+Deleted: sha256:9a5b204f8d738aa07d8a6ab4a8dd529d291269ce8b1e963eca28ac79db9d98a7
+Deleted: sha256:c7eaf239c2f668202eea5aa02fee6e0d11ed8addf7e54e1fc7e197b264d98784
+Deleted: sha256:0faeab8bd225bf861c752636a55cbdb0bed1ae28c9af2b6738845cc842a258ef
+Deleted: sha256:cd13dd088379c034af904d61ab3979f8e27c0274a0165c1cda3c27d279489d22
+Deleted: sha256:53a4b4db1fb398456d4b70ffe338d1bcaf5a011badf0ba150b9b803cfe65bbef
+Deleted: sha256:b2fb96a09ecefb4ac6e791bb6d9c6074efdd1364e3f020a87ac422706db4faaf
+Deleted: sha256:a2e710a2a17880096c0b9d39496b127a4986f32ad7661e1a23970e89aa4e9110
+Deleted: sha256:880a98e8729dfccf66b02b56c47975cb6d541ad5ed979eee93e745ad70510f73
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Update Image tags in chart repository)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] echo
+----I AM Executing----
+[Pipeline] sh
++ pip install pyyaml
+Collecting pyyaml
+  Using cached https://files.pythonhosted.org/packages/ba/d4/3cf562876e0cda0405e65d351b835077ab13990e5b92912ef2bf1a2280e0/PyYAML-5.4.1-cp27-cp27mu-manylinux1_x86_64.whl
+Installing collected packages: pyyaml
+Successfully installed pyyaml-5.4.1
++ pip install pybump
+Collecting pybump
+Collecting pyyaml==5.1 (from pybump)
+Installing collected packages: pyyaml, pybump
+Successfully installed pybump-1.1.6 pyyaml-5.4.1
++ rm -rf values-files
++ git clone https://github.com/vinga2805/ms.git values-files
+Cloning into 'values-files'...
++ python update_image.py vinga2805/ms:snapshot_0.0.1_master_78fe5f1
+Already on 'master'
+Your branch is up to date with 'origin/master'.
+0.1.18
+Bumping up the chart version!!
+Updated the image
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Bootstraping Application)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] echo
+-----Checking if Blue version exists-------
+[Pipeline] sh
++ source /var/lib/jenkins/.bashrc
+++ export KUBECONFIG=/var/lib/jenkins/.kube/eks-cluster
+++ KUBECONFIG=/var/lib/jenkins/.kube/eks-cluster
+++ export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/var/lib/jenkins/.kube/eks-cluster
+++ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/var/lib/jenkins/.kube/eks-cluster
+++ kubectl get service ms-ms-app-service-prod '-o=jsonpath={.spec.selector.slot}' --namespace=100ms
++ version=green
+++ helm list -n 100ms
+++ awk '{print $1}'
+++ grep ms
+++ wc -l
++ count=1
++ '[' 1 == 1 ']'
++ echo 'The application is already deployed version: green'
+The application is already deployed version: green
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Blue/Green Deployment)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] echo
+-----Checking if Blue/Green version exists------
+[Pipeline] sh
++ source /var/lib/jenkins/.bashrc
+++ export KUBECONFIG=/var/lib/jenkins/.kube/eks-cluster
+++ KUBECONFIG=/var/lib/jenkins/.kube/eks-cluster
+++ export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/var/lib/jenkins/.kube/eks-cluster
+++ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/var/lib/jenkins/.kube/eks-cluster
+++ kubectl get service ms-ms-app-service-prod '-o=jsonpath={.spec.selector.slot}' --namespace=100ms
++ version=green
++ '[' green == blue ']'
++ new_version=blue
++ echo '---------Deploying application version: blue for stage---------'
+---------Deploying application version: blue for stage---------
++ helm upgrade ms values-files/helm-charts/ms-app/ --set blue.enabled=true --reuse-values --namespace=100ms
+Release "ms" has been upgraded. Happy Helming!
+NAME: ms
+LAST DEPLOYED: Tue May 18 08:35:02 2021
+NAMESPACE: 100ms
+STATUS: deployed
+REVISION: 15
+TEST SUITE: None
+NOTES:
+1. Get the application URL by running these commands:
+  export POD_NAME=$(kubectl get pods --namespace 100ms -l "app.kubernetes.io/name=ms-app,app.kubernetes.io/instance=ms" -o jsonpath="{.items[0].metadata.name}")
+  echo "Visit http://127.0.0.1:8080 to use your application"
+  kubectl --namespace 100ms port-forward $POD_NAME 8080:80
++ sleep 30
++ echo '---------Testing application on stage deployment---------'
+---------Testing application on stage deployment---------
+++ curl -Iks https://ms-stage.vinga.tk/teslaDyDB/
+++ head -1
+++ cut -d ' ' -f2
++ '[' 200 == 200 ']'
++ echo '---------Application Testing was successful on stage deployment---------'
+---------Application Testing was successful on stage deployment---------
++ echo '---------Production is now pointed to stage deployment---------'
+---------Production is now pointed to stage deployment---------
++ helm upgrade ms values-files/helm-charts/ms-app/ --set productionSlot=blue --reuse-values --namespace=100ms
+Release "ms" has been upgraded. Happy Helming!
+NAME: ms
+LAST DEPLOYED: Tue May 18 08:35:34 2021
+NAMESPACE: 100ms
+STATUS: deployed
+REVISION: 16
+TEST SUITE: None
+NOTES:
+1. Get the application URL by running these commands:
+  export POD_NAME=$(kubectl get pods --namespace 100ms -l "app.kubernetes.io/name=ms-app,app.kubernetes.io/instance=ms" -o jsonpath="{.items[0].metadata.name}")
+  echo "Visit http://127.0.0.1:8080 to use your application"
+  kubectl --namespace 100ms port-forward $POD_NAME 8080:80
++ echo '---------Production is now pointed to stage deployment---------'
+---------Production is now pointed to stage deployment---------
++ echo '---------Decommissioning stage deployment---------'
+---------Decommissioning stage deployment---------
++ helm upgrade ms values-files/helm-charts/ms-app/ --set green.enabled=false --reuse-values --namespace=100ms
+Release "ms" has been upgraded. Happy Helming!
+NAME: ms
+LAST DEPLOYED: Tue May 18 08:35:35 2021
+NAMESPACE: 100ms
+STATUS: deployed
+REVISION: 17
+TEST SUITE: None
+NOTES:
+1. Get the application URL by running these commands:
+  export POD_NAME=$(kubectl get pods --namespace 100ms -l "app.kubernetes.io/name=ms-app,app.kubernetes.io/instance=ms" -o jsonpath="{.items[0].metadata.name}")
+  echo "Visit http://127.0.0.1:8080 to use your application"
+  kubectl --namespace 100ms port-forward $POD_NAME 8080:80
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Production healthcheck and github commit)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] echo
+Wait performing healthcheck....
+[Pipeline] withCredentials
+Masking supported pattern matches of $GIT_USERNAME or $GIT_PASSWORD
+[Pipeline] {
+[Pipeline] sh
+Warning: A secret was passed to "sh" using Groovy String interpolation, which is insecure.
+		 Affected argument(s) used the following variable(s): [GIT_USERNAME]
+		 See https://jenkins.io/redirect/groovy-string-interpolation for details.
++ source /var/lib/jenkins/.bashrc
+++ export KUBECONFIG=/var/lib/jenkins/.kube/eks-cluster
+++ KUBECONFIG=/var/lib/jenkins/.kube/eks-cluster
+++ export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/var/lib/jenkins/.kube/eks-cluster
+++ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/var/lib/jenkins/.kube/eks-cluster
++ sleep 60
+++ curl -Iks https://ms-prod.vinga.tk/teslaDyDB/
+++ head -1
+++ cut -d ' ' -f2
++ '[' 200 == 200 ']'
++ echo 'Procution healthcheck is successful'
+Procution healthcheck is successful
++ echo 'Application deployed successfully'
+Application deployed successfully
++ cd values-files
++ git checkout master
+Already on 'master'
+M	helm-charts/ms-app/Chart.yaml
+M	helm-charts/ms-app/values.yaml
+Your branch is up to date with 'origin/master'.
++ git add .
++ git commit -m 'adding updated image'
+[master e4b3b93] adding updated image
+ 2 files changed, 2 insertions(+), 2 deletions(-)
++ git push git@github.com:****/ms.git
+To github.com:****/ms.git
+   78fe5f1..e4b3b93  master -> master
++ cd ..
+[Pipeline] }
+[Pipeline] // withCredentials
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
