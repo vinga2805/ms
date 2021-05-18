@@ -79,7 +79,7 @@ pipeline {
                        version=`kubectl  get service ${app}-${app}-app-service-prod -o=jsonpath='{.spec.selector.slot}' --namespace=${namespace}`
                        if [ `"helm list -n ${namespace} | awk '{print \$1}' | grep ${app} | wc -l"` == 1 ]
                        then
-                       echo "The application is already deployed and Prod is pointing to ${version} "
+                       echo "The application is already deployed."
                        else
                        echo "The application is not deployed yet...."
                        echo "Deploying Blue version first"
