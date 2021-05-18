@@ -4,6 +4,8 @@ autoscaling:
   maxReplicas: 100
   minReplicas: 1
   targetCPUUtilizationPercentage: 80
+blue:
+  enabled: true
 envProperties:
   MYSQLDB: teslatest
   MYSQLHOST: mydb-mysql
@@ -14,10 +16,12 @@ extraPorts:
   port: 9012
   targetPort: 9012
 fullnameOverride: ''
+green:
+  enabled: false
 image:
   pullPolicy: IfNotPresent
   repository: vinga2805/ms
-  tag: snapshot_0.0.1_master_7f067fa
+  tag: snapshot_0.0.1_master_cb50df5
 imagePullSecrets: []
 ingress:
   annotations:
@@ -35,17 +39,9 @@ podAnnotations:
   prometheus.io/port: '9012'
   prometheus.io/scrape: 'true'
 podSecurityContext: {}
+productionSlot: blue
 replicaCount: 1
 resources: {}
-
-green:
-  enabled: false
-
-blue:
-  enabled: true
-
-productionSlot: blue
-
 secret:
   password: YWxmYV8xMjMK
 securityContext: {}
